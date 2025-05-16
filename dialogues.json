@@ -1,0 +1,20 @@
+{
+  "lakeBoundary": [
+    { "speaker": "System", "line": "The lake is not safe right now." }
+  ],
+  "fish_flies_fountain_intro": [
+    { "speaker": "Fish Flies", "line": "Welcome back Luana" },
+    { "speaker": "Luana", "line": "who?" },
+    { "speaker": "Fish Flies", "line": "You are Luana Moth. Your old name is dead now…we will never call you that" },
+    { "speaker": "Luana", "line": "Right. How long was I gone for?" },
+    { "speaker": "Fish Flies", "line": "about half an hour" },
+    { "speaker": "Luana", "line": "I feel strange...and confused. It felt like centuries passed in mere minutes. I don't remember anything from before, I don't understand much of what Pentometra showed me" },
+    { "speaker": "Fish Flies", "line": "The time dilation and barotrauma has disoriented you. Keep looking around town. We'll all help the best we can." }
+  ],
+  "margot_encounter_1": [
+    { "speaker": "Luana", "line": "Margot! I'm back. Please help. I might need medical attention. Something is wrong." }
+  ],
+  "margot_encounter_2": [
+    { "speaker": "Luana", "line": "Margot! I need your help!..." }
+  ]
+}
