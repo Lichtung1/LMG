@@ -29,13 +29,14 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     setControllable(canControl) {
-        this.isControllable = canControl;
+        this.isControllable = canControl; // Assuming you have an isControllable flag
         if (!canControl) {
-            this.setVelocityX(0); // Stop movement when controls are disabled
-            if (this.anims.currentAnim.key === PLAYER_CONFIG.ANIM_RUN) { 
-                this.anims.play(PLAYER_CONFIG.ANIM_IDLE, true); 
+            this.body.setVelocityX(0); // Stop movement
+            if (this.body.onFloor()) { // Or your grounded check
+                this.anims.play(PLAYER_CONFIG.ANIM_IDLE, true);
             }
         }
+        console.log(`Player controllable set to: ${canControl}`);
     }
 
     // Create animations needed by the player instance
