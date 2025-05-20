@@ -63,6 +63,7 @@ class GameScene extends Phaser.Scene {
         this.load.image(ASSETS.PLANE_TILESET.key, ASSETS.PLANE_TILESET.file);
         this.load.image(ASSETS.HOUSE1_TILESET.key, ASSETS.HOUSE1_TILESET.file);
         this.load.image(ASSETS.HOUSE2_TILESET.key, ASSETS.HOUSE2_TILESET.file);
+        this.load.image(ASSETS.HOTEL_TILESET.key, ASSETS.HOTEL_TILESET.file);
         this.load.image(ASSETS.HARBOURMASTER_TILESET.key, ASSETS.HARBOURMASTER_TILESET.file);
         this.load.tilemapTiledJSON(ASSETS.MAP_DATA.key, ASSETS.MAP_DATA.file);
         this.load.spritesheet(ASSETS.PLAYER_IDLE.key, ASSETS.PLAYER_IDLE.file, { frameWidth: PLAYER_CONFIG.SPRITE_WIDTH, frameHeight: PLAYER_CONFIG.SPRITE_HEIGHT });
@@ -239,12 +240,13 @@ setupMapAndLayers() {
     const tilesetPlane = this.map.addTilesetImage(TILED_NAMES.TILESET_PLANE, ASSETS.PLANE_TILESET.key);
     const tilesetHouse1 = this.map.addTilesetImage(TILED_NAMES.TILESET_HOUSE1, ASSETS.HOUSE1_TILESET.key);
     const tilesetHouse2 = this.map.addTilesetImage(TILED_NAMES.TILESET_HOUSE2, ASSETS.HOUSE2_TILESET.key);
+    const tilesetHotel = this.map.addTilesetImage(TILED_NAMES.TILESET_HOTEL, ASSETS.HOTEL_TILESET.key);
     const tilesetHarbourmaster = this.map.addTilesetImage(TILED_NAMES.TILESET_HARBOURMASTER, ASSETS.HARBOURMASTER_TILESET.key);
     
 
     const allTilesets = [
         tilesetMain, tilesetTrees, tilesetDecorations, tilesetViking,
-        tilesetStore1, tilesetPlane, tilesetHouse1, tilesetHouse2, tilesetHarbourmaster
+        tilesetStore1, tilesetPlane, tilesetHouse1, tilesetHouse2, tilesetHarbourmaster, tilesetHotel
     ].filter(ts => ts); // Filter out any nulls if a tileset fails to load
 
     if (allTilesets.length === 0) { // Or check specifically for tilesetMain
@@ -1346,7 +1348,7 @@ const config = {
         autoCenter: Phaser.Scale.CENTER_BOTH, 
         zoom: 2,
     },
-    scene: [GameScene] // Your scene(s)  CutsceneScene, 
+    scene: [GameScene] // CutsceneScene, 
 };
 
 // --- Create the Phaser Game Instance ---

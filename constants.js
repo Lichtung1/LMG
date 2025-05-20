@@ -21,6 +21,7 @@ const ASSETS = {
     DECORATIONS: { key: 'decorative_elements_img', file: 'assets/Decorative_Elements.png' },
     PLANE_TILESET: { key: 'plane_tileset_img', file: 'assets/plane.png' }, // Added plane.png
     HARBOURMASTER_TILESET: { key: 'harbourmaster_tileset_img', file: 'assets/harbourmaster.png' }, // Added harbourmaster.png
+    HOTEL_TILESET: { key: 'hotel_tileset_img', file: 'assets/hotel.png' }, // Added harbourmaster.png
     MAP_DATA: { key: 'levelMap', file: 'assets/level.tmj' },
     STORE_TILESET: { key: 'store1_tileset_img', file: 'assets/store1.png' },
     DIALOGUE_DATA: { key: 'dialogue_data_main', file: 'dialogues.json' },
@@ -40,6 +41,7 @@ const TILED_NAMES = {
     TILESET_STORE1: 'store1', 
     TILESET_HOUSE1: 'house1', 
     TILESET_HOUSE2: 'house2', 
+    TILESET_HOTEL: 'hotel', 
     TILESET_HARBOURMASTER: 'harbourmaster',  // Added 'harbourmaster' as named in Tiled
     LAYER_COLLISION: 'Tile Layer 1',
     TILESET_PLANE: 'plane',                // Added 'plane' as named in Tiled
