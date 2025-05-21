@@ -4,8 +4,8 @@ class GameScene extends Phaser.Scene {
         // Ensure properties for all layers are present
         this.player = null; this.cursors = null; this.map = null; this.collisionLayer = null; this.birds = null;
         this.glitchManager = null; this.uiManager = null;
-        this.originalBackground = null; // Furthest background
-        this.bgLayer1 = null; this.bgLayer2 = null; this.bgLayer3 = null; // New parallax layers
+        this.originalBackground = null; 
+        this.bgLayer1 = null; this.bgLayer2 = null; this.bgLayer3 = null; 
         this.stars = null; this.playerLight = null; this.fireflies = null; this.fireflyTextureCreated = false;
         this.glitchKeyU = null; this.glitchKeyI = null; this.glitchKeyO = null; this.glitchKeyP = null;
         this.glitchTriggerZones = [];
@@ -25,31 +25,56 @@ class GameScene extends Phaser.Scene {
         this.lunaMothDialogueTriggered = false;
         this.playerIsFollowingLunaMoth = false;
         this.playerSpawnData = null; 
-        this.fishflySpawn1Data = null; // For 1st swarm's Tiled spawn point
-        this.fishflyTrigger2Rect = null; // For 2nd swarm's trigger zone
-        this.fishflySpawn2Data = null; // For 2nd swarm's Tiled spawn point
+        this.fishflySpawn1Data = null; 
+        this.fishflyTrigger2Rect = null;
+        this.fishflySpawn2Data = null; 
         this.fishflyDialogue2Triggered = false;
-
         this.gatekeeperNpc = null;
         this.gatekeeperSpawnData = null;
         this.gatekeeperTriggerRect = null;
         this.gatekeeperDialogueTriggered = false;
-        this.lunaMothSequenceCompleted = false; // Flag to know Luna Moth part is done
-        this.awaitingIncantationInput = false;  // True when player should be typing
-        this.typedIncantation = "";             // Stores what the player types
-        this.incantationTextObject = null;      // Phaser text object to display typed text
-        this.incantationPromptText = null;    // Phaser text object for "Recite..." prompt
-        this.vikingIncantationTriggerZone = null; // Will store the specific Viking zone object from Tiled
-        this.incantationSuccessfulAndForestRevealed = false; // Keep this flag
-
-        // Incantation details - to be set in create()
+        this.lunaMothSequenceCompleted = false; 
+        this.awaitingIncantationInput = false; 
+        this.typedIncantation = "";            
+        this.incantationTextObject = null;     
+        this.incantationPromptText = null;    
+        this.vikingIncantationTriggerZone = null; 
+        this.incantationSuccessfulAndForestRevealed = false; 
         this.CORRECT_INCANTATION_WORD = "";
         this.INCANTATION_REPETITIONS = 0;
         this.FULL_CORRECT_INCANTATION = "";
+        this.loadingText = null;
     }
 
 
     preload() {
+        const centerX = this.cameras.main.width / 2;
+        const centerY = this.cameras.main.height / 2;
+
+        // 1. Create text with a fallback, visible immediately.
+        this.loadingText = this.add.text(centerX, centerY, 'LOADING...', {
+            fontFamily: 'monospace', // Fallback font
+            fontSize: '48px',
+            fill: '#ffffff',
+            align: 'center'
+        }).setOrigin(0.5);
+
+        // 2. Attempt to apply the custom font once it's ready.
+        // This relies on your CSS @font-face for 'EccoEpilogue' being correct.
+        document.fonts.ready.then(() => {
+            // This promise resolves when all CSS-linked fonts are loaded,
+            // or at least when the browser has finished its initial font processing.
+            if (this.loadingText && this.loadingText.active) {
+                // Check if 'EccoEpilogue' is now actually available before setting it
+                if (document.fonts.check('1em EccoEpilogue')) {
+                    this.loadingText.setFontFamily('EccoEpilogue');
+                    console.log('LOADING... text updated to EccoEpilogue (using document.fonts.ready).');
+                } else {
+                    console.warn('EccoEpilogue still not checkable after document.fonts.ready, using fallback.');
+                }
+            }
+        });
+
         this.load.image(ASSETS.BACKGROUND_ORIGINAL.key, ASSETS.BACKGROUND_ORIGINAL.file);
         this.load.image(ASSETS.BG_LAYER_1.key, ASSETS.BG_LAYER_1.file);
         this.load.image(ASSETS.BG_LAYER_2.key, ASSETS.BG_LAYER_2.file);
@@ -80,6 +105,11 @@ class GameScene extends Phaser.Scene {
     }
 
     create() {
+        if (this.loadingText) {
+            this.loadingText.destroy();
+            this.loadingText = null;
+        }
+
         console.log("Phaser: Creating scene...");
         const camWidth = this.cameras.main.width;
         const camHeight = this.cameras.main.height;
