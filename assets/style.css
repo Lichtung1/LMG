@@ -1,0 +1,23 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%; 
+    background-color: #101010;
+    overflow: hidden; 
+}
+
+body {
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    font-family: 'EccoEpilogue', sans-serif; 
+}
+
+canvas { 
+    display: block; 
+}
+
+@font-face {
+    font-family: 'EccoEpilogue';
+    src: url('assets/eccoepilogue-v2.ttf') format('truetype');
+}

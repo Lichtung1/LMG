@@ -1,0 +1,60 @@
+{
+  "lakeBoundary": [
+    { "speaker": "System", "line": "The lake is not safe right now." }
+  ],
+  "fish_flies_fountain_intro": [
+    { "speaker": "Fish Flies", "line": "Welcome back Luana" },
+    { "speaker": "Luana", "line": "who?" },
+    { "speaker": "Fish Flies", "line": "You are Luana Moth. Your old name is dead now…we will never call you that" },
+    { "speaker": "Luana", "line": "Right. How long was I gone for?" },
+    { "speaker": "Fish Flies", "line": "about half an hour" },
+    { "speaker": "Luana", "line": "I feel strange...and confused. It felt like centuries passed in mere minutes. I don't remember anything from before, I don't understand much of what Pentometra showed me" },
+    { "speaker": "Fish Flies", "line": "The time dilation and barotrauma has disoriented you. Keep looking around town. We'll all help the best we can." }
+  ],
+  "margot_encounter_1": [
+    { "speaker": "Luana", "line": "Margot! I'm back. Please help. I might need medical attention. Something is wrong." }
+  ],
+  "margot_encounter_2": [
+    { "speaker": "Luana", "line": "Margot! I need your help!..." }
+  ],
+  "moth_encounter_dialogue": [
+    { "speaker": "Atlas Moth", "line": "She can’t hear you or see you. Only we can. It appears you’ve returned only in mind and spirit but not body." },
+    { "speaker": "Luana", "line": "Is this part of it? Was this supposed to happen?" },
+    { "speaker": "Atlas Moth", "line": "it’s difficult to know. Something may have gone wrong. But you have help. Not just from us, but others as well…" },
+    { "speaker": "Luana", "line": "what do you mean?" },
+    { "speaker": "Atlas Moth", "line": "You need to go to the forest behind the viking. Things might start to make more sense there." },
+    { "speaker": "Luana", "line": "What forest behind the viking? It’s all lakefront there…" },
+    { "speaker": "Atlas Moth", "line": "You’ll experience things differently now. Spatial boundaries are easily manipulated. There is a simple incantation that will allow for this kind of manipulation near the viking." },
+    { "speaker": "Atlas Moth", "line": "Recite it when you get there and the forest will appear before you. But you must remember and recite the incantation verbatim. Letter for letter." },
+    { "speaker": "Luana", "line": "I understand…" },
+    { "speaker": "Atlas Moth", "line": "The incantation is: PASSWORD. Remember it well. Do not forget." }
+  ],
+    "luna_moth_intro_dialogue": [
+    { "speaker": "Luna Moth", "line": "Luana. What did Pentometra have to show you?" },
+    { "speaker": "Luana", "line": "A burning effigy coming to life and crushing people in a jungle, you, my birth, an Atlas Moth, and a catastrophic global disaster." },
+    { "speaker": "Luna Moth", "line": "You travelled all five wombs! Impressive. This kind of travel is dangerous." },
+    { "speaker": "Luana", "line": "I need to get to the viking. Please help me. I have no idea where I am going. I don’t remember my way around town. Everything looks…different" },
+    { "speaker": "Luna Moth", "line": "Only your most vivid memories remain. Not much else will render properly in here. You will need my help to navigate. That is why Pentometra introduced us. Follow me" }
+  ],
+
+  "luna_moth_farewell_dialogue": [
+    { "speaker": "Luna Moth", "line": "I can’t go with you further. Good luck." }
+  ],
+
+    "fish_flies_project_quassia_dialogue": [
+    { "speaker": "Fishflies", "line": "Do you remember Project Quassia?" },
+    { "speaker": "Luana", "line": "the words sounds familiar but no…not really" },
+    { "speaker": "Fishflies", "line": "that’s… not good. Parts of you were left behind. But you have help now. Someone has put in a lot of work in unearthing the story you so desperately tried to keep a secret. And good thing cause you will need them to interpret what Pentometra showed you and define your mission moving forward" },
+    { "speaker": "Luana", "line": "how do they know what Pentometra showed me?" },
+    { "speaker": "Fishflies", "line": "that is something you’ll all need to figure out" },
+    { "speaker": "Luana", "line": "Who is it? How do I find them?" },
+    { "speaker": "Fishflies", "line": "A brother and Sister. Tony and Giovanna. You can’t interact physically, but they are piecing together your story and trying to make contact. Get to the viking, recite the incantation. When the forest appears behind the viking you’ll know you can safely pass the threshold. Enter the forest, close your eyes, and you will see and hear them" }
+  ],
+
+    "gatekeeper_encounter_dialogue": [
+    { "speaker": "Entity", "line": "Welcome Luana. There are things I need to show you. Transmissions from a brother and sister who’ve devoted their lives to unearthing your story." },
+    { "speaker": "Luana", "line": "So I’ve heard. I can’t have this. I don’t want interference. Nobody can know my endeavours…" },
+    { "speaker": "Entity", "line": "They understand the sensitive details of your mission. Only the benign non-sensitive aspects that can advance your mission are explicitly shared with the general public. Think of them as your avatars in the physical world. Tony and Giovanna have made music in order to communicate with you. The sensitive details are encrypted within the music in such a way that only yourself, and very select others will understand. There are cyphers threaded all throughout the music in various ways. This is how you’ll communicate sensitive information to each other. The music is how you’ll make contact. You can return to the forest periodically and the transmissions will change as Tony and Giovanna work on them. Do you wish to proceed?" },
+    { "speaker": "Luana", "line": "Yes. Please show me" }
+  ]
+}
