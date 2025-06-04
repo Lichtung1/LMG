@@ -1369,17 +1369,21 @@ checkTriggersAndInteractions(time, delta) {
 // --- Phaser Game Configuration ---
 const config = {
     type: Phaser.AUTO,
-    width: 800,
-    height: 336,
-    parent: 'phaser-game', 
-    pixelArt: true,     
+    width: 800, // Your game's design width
+    height: 336, // Your game's design height
+    parent: 'phaser-game',
+    pixelArt: true,
     physics: { default: 'arcade', arcade: { gravity: { y: 750 }, debug: false } },
     scale: {
+        mode: Phaser.Scale.FIT, // This will scale the game to fit within the window, maintaining aspect ratio.
         autoCenter: Phaser.Scale.CENTER_BOTH, 
-        zoom: 2,
+
+        orientation: Phaser.Scale.LANDSCAPE, // Request landscape orientation
+        forceOrientation: true // Attempt to force this orientation on mobile
     },
-    scene: [GameScene] // CutsceneScene, 
+    scene: [GameScene]
 };
+
 
 // --- Create the Phaser Game Instance ---
 const game = new Phaser.Game(config);
