@@ -127,9 +127,9 @@ class GameScene extends Phaser.Scene {
 
             // Optional: Visual cues for touch areas (for debugging or as part of UI)
             // This is just for visualization, you can remove it later.
-            const midPoint = this.cameras.main.width / 2;
-            this.leftZoneDebug = this.add.rectangle(0, 0, midPoint, this.cameras.main.height, 0xff0000, 0.1).setOrigin(0).setScrollFactor(0).setDepth(500);
-            this.rightZoneDebug = this.add.rectangle(midPoint, 0, midPoint, this.cameras.main.height, 0x0000ff, 0.1).setOrigin(0).setScrollFactor(0).setDepth(500);
+            //const midPoint = this.cameras.main.width / 2;
+            //this.leftZoneDebug = this.add.rectangle(0, 0, midPoint, this.cameras.main.height, 0xff0000, 0.1).setOrigin(0).setScrollFactor(0).setDepth(500);
+            //this.rightZoneDebug = this.add.rectangle(midPoint, 0, midPoint, this.cameras.main.height, 0x0000ff, 0.1).setOrigin(0).setScrollFactor(0).setDepth(500);
         }
 
         const camWidth = this.cameras.main.width;
