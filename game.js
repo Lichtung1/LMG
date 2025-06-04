@@ -45,6 +45,9 @@ class GameScene extends Phaser.Scene {
         this.FULL_CORRECT_INCANTATION = "";
         this.loadingText = null;
         this.orientationNotice = null; 
+        this.isPressingLeft = false;
+        this.isPressingRight = false;
+        this.movementPointerId = null;
     }
 
 
@@ -112,6 +115,23 @@ class GameScene extends Phaser.Scene {
         }
 
         console.log("Phaser: Creating scene...");
+
+        
+        // --- Mobile Control Setup ---
+        if (!this.sys.game.device.os.desktop) { // Only enable touch controls on non-desktop
+            this.input.addPointer(1); // Ensure Phaser is ready for at least 2 touch points (0 and 1)
+
+            this.input.on('pointerdown', this.handlePointerDown, this);
+            this.input.on('pointerup', this.handlePointerUp, this);
+            this.input.on('pointerupoutside', this.handlePointerUp, this); // Handle if finger slides off screen
+
+            // Optional: Visual cues for touch areas (for debugging or as part of UI)
+            // This is just for visualization, you can remove it later.
+            const midPoint = this.cameras.main.width / 2;
+            this.leftZoneDebug = this.add.rectangle(0, 0, midPoint, this.cameras.main.height, 0xff0000, 0.1).setOrigin(0).setScrollFactor(0).setDepth(500);
+            this.rightZoneDebug = this.add.rectangle(midPoint, 0, midPoint, this.cameras.main.height, 0x0000ff, 0.1).setOrigin(0).setScrollFactor(0).setDepth(500);
+        }
+
         const camWidth = this.cameras.main.width;
         const camHeight = this.cameras.main.height;
 
@@ -261,6 +281,52 @@ class GameScene extends Phaser.Scene {
         this.glitchManager?.createStaticTexture();
 
         console.log("Phaser: Create complete.");
+    }
+
+    handlePointerDown(pointer) {
+        if (!this.player || !this.player.active) return; // Ensure player exists
+
+        const screenWidth = this.cameras.main.width;
+
+        // --- Movement Logic ---
+        if (this.movementPointerId === null || this.movementPointerId === undefined) { // No finger is currently dedicated to movement
+            if (pointer.x < screenWidth / 2) { // Pressed left half
+                this.isPressingLeft = true;
+                this.isPressingRight = false; // Ensure only one direction
+                this.movementPointerId = pointer.id;
+                console.log('Movement: Start Left - Pointer ID:', pointer.id);
+            } else { // Pressed right half
+                this.isPressingRight = true;
+                this.isPressingLeft = false; // Ensure only one direction
+                this.movementPointerId = pointer.id;
+                console.log('Movement: Start Right - Pointer ID:', pointer.id);
+            }
+        }
+        // --- Jump Logic (if a movement finger is already down, this new tap is a jump) ---
+        // `pointer` here is the NEW finger that just went down.
+        // We check if `this.movementPointerId` is already set by ANOTHER finger.
+        else if (this.movementPointerId !== null && this.movementPointerId !== pointer.id) {
+            console.log('Action: Jump Attempt - Pointer ID:', pointer.id, 'while Movement Pointer ID is:', this.movementPointerId);
+            if (typeof this.player.doJump === 'function') { // Check if doJump method exists
+                 this.player.doJump(); // Player handles its own jump conditions (e.g., on ground)
+            } else {
+                console.warn("Player object does not have a doJump method.");
+            }
+        }
+    }
+
+    handlePointerUp(pointer) {
+        if (!this.player || !this.player.active) return;
+
+        // If the finger being lifted was the one controlling movement
+        if (pointer.id === this.movementPointerId) {
+            console.log('Movement: Stop - Pointer ID:', pointer.id);
+            this.isPressingLeft = false;
+            this.isPressingRight = false;
+            this.movementPointerId = null;
+        }
+        // Note: For the simple jump-on-second-pointer-down, we don't need specific logic
+        // in pointerup for the jump itself, as it happens on 'pointerdown'.
     }
 
 
@@ -733,7 +799,25 @@ createPlayerAndCamera() {
         this.bgLayer3?.setTilePosition(scrollX * PARALLAX_FACTORS.BG_LAYER_3);
 
         // --- Core Entity Updates ---
-        this.player.update(this.cursors);
+        if (this.player && this.player.active) {
+            if (this.sys.game.device.os.desktop) {
+                // Pass keyboard cursors to the player for it to handle
+                if (this.cursors) { // Make sure cursors are initialized
+                    this.player.handleKeyboardInput(this.cursors);
+                }
+                // Reset mobile flags when on desktop to prevent them from sticking
+                this.player.setMobileMoveLeft(false);
+                this.player.setMobileMoveRight(false);
+            } else {
+                // Set mobile movement state on the player from GameScene's touch flags
+                this.player.setMobileMoveLeft(this.isPressingLeft);
+                this.player.setMobileMoveRight(this.isPressingRight);
+                // Ensure keyboard state is "neutral" if mobile is active
+                this.player.keyboardSpeedX = 0; 
+            }
+            // Player's main update handles applying physics and animations
+            this.player.update(time, delta);
+        }
 
         this.birds?.children.iterate(bird => {
             if (bird?.active && typeof bird.update === 'function') {
