@@ -29,7 +29,7 @@ const ASSETS = {
     LUNA_MOTH_SPRITESHEET: { key: 'moth_sheet', file: 'assets/moth_spritesheet.png' },
     MARGOT_IDLE: { key: 'margot_idle_sheet', file: 'assets/margot_idle_spritesheet.png' },
     MARGOT_WALK: { key: 'margot_walk_sheet', file: 'assets/margot_walk_spritesheet.png' },
-    GATEKEEPER_SPRITESHEET: { key: 'gatekeeperSheet', file: 'assets/Entity.png' },
+    GATEKEEPER_SPRITESHEET: { key: 'gatekeeperSheet', file: 'assets/Entity.png' }
 };
 
 // Tiled Map Names

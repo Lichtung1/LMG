@@ -44,6 +44,7 @@ class GameScene extends Phaser.Scene {
         this.INCANTATION_REPETITIONS = 0;
         this.FULL_CORRECT_INCANTATION = "";
         this.loadingText = null;
+        this.orientationNotice = null; 
     }
 
 
@@ -122,11 +123,40 @@ class GameScene extends Phaser.Scene {
             this.uiManager = new UIManager(this);
         } else { console.error("UIManager class not found!"); }
 
+
+        // --- Create the Orientation Notice (Text-based for this example) ---
+        // It's created but initially hidden or its visibility is set by checkOrientationDisplay.
+        this.orientationNotice = this.add.text(
+            this.cameras.main.centerX,
+            this.cameras.main.centerY,
+            'Please rotate your device\nto Landscape mode', // Using \n for a potential line break
+            {
+                fontFamily: 'EccoEpilogue', //  <<< USE YOUR CUSTOM FONT HERE
+                fontSize: '28px',          //  <<< SET FONT SIZE
+                fill: '#ffffff',
+                backgroundColor: 'rgba(0,0,0,0.85)',
+                padding: { x: 20, y: 15 },
+                align: 'center', // Important for multi-line text
+                wordWrap: { width: this.cameras.main.width * 0.8 }
+            }
+        )
+        .setOrigin(0.5)
+        .setScrollFactor(0)
+        .setDepth(2000)
+        .setVisible(false);
+
+        // Check initial orientation and show/hide notice
+        this.checkOrientationDisplay(); // Make sure this method is defined in your GameScene class
+
+        // Listen for orientation changes
+        this.scale.on('orientationchange', this.checkOrientationDisplay, this);
+
+
         // Backgrounds (static & parallax tileSprites)
         this.originalBackground = this.add.tileSprite(0, 0, camWidth, camHeight, ASSETS.BACKGROUND_ORIGINAL.key)
             .setOrigin(0, 0).setScrollFactor(0).setDepth(-9).setVisible(true).setTileScale(0.1, 0.1);
         this.bgLayer1 = this.add.tileSprite(0, 0, camWidth, camHeight, ASSETS.BG_LAYER_1.key)
-            .setOrigin(0, 0).setScrollFactor(0).setDepth(-7).setVisible(false); // Parallax for these is handled in update by changing tilePositionX
+            .setOrigin(0, 0).setScrollFactor(0).setDepth(-7).setVisible(false);
         this.bgLayer2 = this.add.tileSprite(0, 0, camWidth, camHeight, ASSETS.BG_LAYER_2.key)
             .setOrigin(0, 0).setScrollFactor(0).setDepth(-6).setVisible(false);
         this.bgLayer3 = this.add.tileSprite(0, 0, camWidth, camHeight, ASSETS.BG_LAYER_3.key)
@@ -148,7 +178,7 @@ class GameScene extends Phaser.Scene {
 
         // === STARS (AFTER MAP SETUP to use this.map.widthInPixels) ===
         this.stars = this.add.group(); // Initialize the stars group
-        this.createStars();         // Call createStars (it will now use the map's width)
+        this.createStars();        // Call createStars (it will now use the map's width)
 
         // Initialize Physics Groups
         this.birds = this.physics.add.group({ allowGravity: false, immovable: true });
@@ -194,7 +224,6 @@ class GameScene extends Phaser.Scene {
         let lunaMothSpawnX = 100; // Default X for Luna Moth
         let lunaMothSpawnY = 200; // Default Y for Luna Moth
 
-        // Luna Moth Spawn Point (logic from your previous code, this is good)
         const lunaSpawnPointObject = this.map.findObject(TILED_NAMES.LAYER_TRIGGERS, obj => obj.name === TILED_NAMES.OBJECT_NAME_LUNA_MOTH_SPAWN_POINT);
         if (lunaSpawnPointObject) {
             lunaMothSpawnX = lunaSpawnPointObject.x;
@@ -219,24 +248,17 @@ class GameScene extends Phaser.Scene {
 
         if (this.lunaMothWaypoints.length === 0) {
             console.warn("No Luna Moth waypoints were loaded from Tiled. Luna Moth might not lead correctly. Consider adding Tiled objects like 'LunaWaypoint_0', 'LunaWaypoint_1', etc.");
-            // You might want to define a very simple default path here if Tiled waypoints fail,
-            // or ensure your LunaMothNPC handles an empty waypoints array gracefully.
-            // Example fallback (though Tiled is preferred):
-            // this.lunaMothWaypoints = [{ x: lunaMothSpawnX + 100, y: lunaMothSpawnY }];
         }
 
 
         this.createFishflyTexture();
-        this.fishFliesSwarm = this.add.group({ runChildUpdate: true });
+        // this.fishFliesSwarm = this.add.group({ runChildUpdate: true }); // NOTE: This was initialized earlier, check if re-init is needed.
         this.createAnimations();
         this.createFallbackBirds();
         this.setupCollisions();
         this.createWater();
         this.setupInput();
         this.glitchManager?.createStaticTexture();
-        
-
-
 
         console.log("Phaser: Create complete.");
     }
@@ -1364,6 +1386,26 @@ checkTriggersAndInteractions(time, delta) {
         }
     }
 
+    checkOrientationDisplay() {
+        if (!this.orientationNotice) { // If notice hasn't been created yet, do nothing
+            // console.log('[Orientation Check] Notice object does not exist yet.');
+            return;
+        }
+
+        if (this.scale.isPortrait) {
+            console.log("[Orientation Check] Display is Portrait. Showing notice.");
+            this.orientationNotice.setText('Please rotate your\ndevice to Landscape mode');
+            this.orientationNotice.setVisible(true);
+        } else if (this.scale.isLandscape) {
+            console.log("[Orientation Check] Display is Landscape. Hiding notice.");
+            this.orientationNotice.setVisible(false);
+        } else {
+            // Fallback for any other state, though usually it's one of the above
+            console.log("[Orientation Check] Orientation unknown or not strictly portrait/landscape. Hiding notice.");
+            this.orientationNotice.setVisible(false);
+        }
+    }
+
 } // End Scene Class
 
 // --- Phaser Game Configuration ---
@@ -1376,14 +1418,13 @@ const config = {
     physics: { default: 'arcade', arcade: { gravity: { y: 750 }, debug: false } },
     scale: {
         mode: Phaser.Scale.FIT, // This will scale the game to fit within the window, maintaining aspect ratio.
-        autoCenter: Phaser.Scale.CENTER_BOTH, 
+        autoCenter: Phaser.Scale.CENTER_BOTH, // This keeps your game centered.
 
         orientation: Phaser.Scale.LANDSCAPE, // Request landscape orientation
         forceOrientation: true // Attempt to force this orientation on mobile
     },
     scene: [GameScene]
 };
-
 
 // --- Create the Phaser Game Instance ---
 const game = new Phaser.Game(config);
