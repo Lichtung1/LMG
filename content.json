@@ -1,0 +1,22 @@
+{
+  "operatorLog": {
+    "title": "Operator Log - G.Dyck",
+    "text": "George Dyck - System Profile\n----------------------------\n\nHello! You've opened this system's user profile. I'm George Dyck.\n\nI love the experience of computers from the 90s and 00s: those distinct start-up beeps and chirps; the heavy breath of computer fans and the buzz of a hard drive. I remember the mysterious emptiness of a command line interface (a space for creating ex nihilo) and the tactile nature of building a first webpage on GeoCities or Angelfire.\n\nThat early sense of computer discovery, and the wonder they conjure up, deeply influence my work. I strive to generate more spaces online that tell stories and elicit curiosity, that are inspiring rather than just meant to be logged into and spark something that carries over after you've closed the window.\n\nMY CREATIVE ENDEAVOURS\n---------------------\nWeb Architecture: I design and build websites, focusing on creating interactive experiences that offer more than surface utility. I'm interested in structures that invite exploration and perhaps reveal layers over time.\n\n3D Visualisation: I work with 3D modelling and rendering to give form to concepts and visual ideas.\n\nSound & Creative Code: I also explore sound design (including for my band, moyamoya) and other avenues where code meets creative expression.\n\n---------------\n\nThanks for checking this out. The other icons here offer glimpses into the different facets of my work.\n\n---------------\nPhD Engineering, U of M\nBSc Engineering, U of M\nBA Mathematics & Philosophy, CMU"
+  },
+  "moyamoyaLauncher": {
+    "title": "Moyamoya OS - Launcher",
+    "text": "This is a interactive ARG for the band MOYAMOYA. It is an experience that should be viewed as an 'escape room' or a puzzle. It's primary function is to develop the band aethetic, so whethere the user sends 10 second or 1 hour playing this 'game' it communicates the artistic direction of the band. The experience is deep and has multiple puzzles and levels in it."
+  },
+  "lichtungExplainer": {
+    "title": "Lichtung - Notes",
+    "text": "This is a creative code art piece. The text itself is the medium. The act of searching for meaning directly alters the state of the text, rendering any stable interpretation impossible. This is an exploration of that dissolution. An interactive exegesis on the Book of Job, inspired by a Žižekian reading of suffering and deeper meaning."
+  },
+  "mothExplainer": {
+    "title": "Luana Moth - Notes",
+    "text": "I created this game for a local Winnipeg band to explore their lore and provide a different outlet for the musical exression. It follows the main character of their epic prog-electro-rock story.The experience was developed from scratch using an open source javascript library called Phaser."
+  },
+  "welcomeNote": {
+    "title": "Welcome.txt",
+    "text": "Welcome to GEORGE OS!\n\nThis is an interactive portfolio. Feel free to explore.\n\n- Double-click icons to open them.\n- Drag windows by their title bars.\n- Resize windows using the handle in the bottom-right corner."
+  }
+}

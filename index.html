@@ -1,20 +1,77 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>My Game</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GEORGE DYCK OS</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/phaser@3.80.1/dist/phaser.min.js"></script>
-    </head>
+</head>
 <body>
-    <div id="phaser-game"></div> <script src="constants.js"></script>
-    <script src="player.js"></script>
-    <script src="Bird.js"></script>
-    <script src="MothNPC.js"></script>
-    <script src="LunaMoth.js"></script>
-    <script src="UIManager.js"></script> <script src="GlitchManager.js"></script>
-    <script src="CutsceneScene.js"></script>
-    <script src="FishFly.js"></script>
-    <script src="Margot.js"></script>
-    <script src="GatekeeperNPC.js"></script>
-    <script src="game.js"></script> </body>
+
+    <div id="desktop"> 
+        <div class="desktop-icon" id="icon-operator-log" 
+        data-window-id="operator-log-window" 
+        data-window-title-key="operatorLog" 
+        data-content-key="operatorLog"> <img src="images/operator_log_icon.png" alt="Operator Log"> 
+            <span>OPERATOR.LOG</span>
+        </div>
+
+        <div class="desktop-icon" id="icon-mmos"> <img src="images/MMOS.png" alt="Moyamoya OS"> 
+            <span>MMOS.exe</span>
+        </div>
+
+        <div class="desktop-icon" id="icon-lichtung"> <img src="images/job.png" alt="Job Simulator"> 
+            <span>text_dissolution.exe</span>
+        </div>
+
+        <div class="desktop-icon" id="icon-art-folder" data-window-id="art-folder-window" 
+            data-window-title="Art" data-content-type="custom-art-list"> <img src="images/folder.png" alt="Art Folder"> 
+            <span>Art</span>
+        </div>
+
+        <div class="desktop-icon" id="icon-moth"><img src="images/moth.png" alt="Luana Moth"> 
+            <span>Luana_Moth.exe</span>
+        </div>
+    </div>
+
+    <div id="taskbar">
+        <button id="start-button">
+            <strong>Start</strong>
+        </button>
+        <div id="taskbar-buttons-container">
+        </div>
+        <div id="taskbar-clock"></div>
+    </div>
+
+    <div id="start-menu" class="start-menu" style="display: none;">
+        <div class="start-menu-header">
+            <strong>Windows</strong><span class="ninety-five">95</span>
+        </div>
+        <ul>
+            <li data-action="open-window" data-window-id="programs-window" data-window-title="Programs" data-content-type="text" data-content="Programs folder: Accessories, StartUp, MS-DOS Prompt..."><span>P</span>rograms</li>
+            <li data-action="open-window" data-window-id="documents-window" data-window-title="Documents" data-content-type="text" data-content="Recently opened documents would be listed here."><span>D</span>ocuments</li>
+            <li data-action="open-window" data-window-id="settings-window" data-window-title="Settings" data-content-type="text" data-content="Settings: Control Panel, Printers, Taskbar..."><span>S</span>ettings</li>
+            <li data-action="open-window" data-window-id="find-window" data-window-title="Find" data-content-type="text" data-content="Find: Files or Folders..."><span>F</span>ind</li>
+            <li class="separator"></li>
+            <li data-action="help"><span>H</span>elp</li>
+            <li data-action="run"><span>R</span>un...</li>
+            <li class="separator"></li>
+            <li data-action="shutdown">Sh<span>u</span>t Down...</li>
+        </ul>
+    </div>
+
+    <div class="window" id="window-template">
+        <div class="title-bar">
+            <span class="title">Window</span>
+            <div class="title-bar-controls">
+                <button class="minimize-button" aria-label="Minimize" data-symbol="0"></button>
+                <button class="close-button" aria-label="Close" data-symbol="r"></button>
+            </div>
+        </div>
+        <div class="window-body">
+        </div>
+        <div class="resize-handle"></div> </div>
+
+    <script src="script.js"></script>
+</body>
 </html>
