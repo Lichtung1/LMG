@@ -48,6 +48,7 @@ class GameScene extends Phaser.Scene {
         this.isPressingLeft = false;
         this.isPressingRight = false;
         this.movementPointerId = null;
+        this.keyboardGroup = null;
     }
 
 
@@ -125,7 +126,7 @@ class GameScene extends Phaser.Scene {
             this.cameras.main.centerY,
             'Press to Begin',
             {
-                fontFamily: 'EccoEpilogue', // Use your game's font
+                fontFamily: 'EccoEpilogue', 
                 fontSize: '32px',
                 fill: '#ffffff',
                 backgroundColor: 'rgba(0,0,0,0.5)',
@@ -259,7 +260,7 @@ class GameScene extends Phaser.Scene {
         if (typeof MothNPC !== 'undefined') {
             this.mothNpc = new MothNPC(this, mothSpawnX, mothSpawnY);
             this.npcs.add(this.mothNpc);
-            console.log("Atlas Moth (mothNpc) instance added to scene and group.");
+            console.log("Atlas Moth (mothNpc) instance  to scene and group.");
             if (this.mothNpc && typeof this.createFirefliesForLight === 'function') {
                 this.createFirefliesForLight(this.mothNpc.x, this.mothNpc.y);
             }
@@ -288,7 +289,7 @@ class GameScene extends Phaser.Scene {
         if (typeof LunaMothNPC !== 'undefined' && this.player) {
             this.lunaMothNpc = new LunaMothNPC(this, lunaMothSpawnX, lunaMothSpawnY, this.player);
             this.npcs.add(this.lunaMothNpc);
-            console.log("LunaMothNPC instance added to scene and group.");
+            console.log("LunaMothNPC instance  to scene and group.");
         } else {
             if (typeof LunaMothNPC === 'undefined') console.error("LunaMothNPC class not defined! Make sure it's included.");
             if (!this.player) console.error("Player not available for LunaMothNPC instantiation.");
@@ -500,7 +501,7 @@ setupMapAndLayers() {
                     if (this.npcs) { this.npcs.add(this.margotNpc); }
                     else { console.error("this.npcs group not initialized before adding MargotNPC!"); } // Should be fine as npcs is created in create()
                     this.margotNpc.setActive(true).setVisible(true);
-                    console.log("Margot NPC instance added to scene and group."); // We need to see this log!
+                    console.log("Margot NPC instance  to scene and group."); // We need to see this log!
                 } else { console.error("MargotNPC class not defined."); }
             } else if (obj.name === TILED_NAMES.OBJECT_NAME_LUNA_MOTH_TRIGGER) { // Luna Moth Dialogue
                 this.lunaMothTriggerZoneRect = new Phaser.Geom.Rectangle(obj.x, obj.y, obj.width, obj.height);
@@ -651,7 +652,7 @@ createPlayerAndCamera() {
         if (this.player && this.npcs) {
             // Use the group for collision checks
             this.physics.add.overlap(this.player, this.npcs, this.handlePlayerNpcOverlap, null, this);
-            console.log("Added overlap check between player and npcs group.");
+            console.log(" overlap check between player and npcs group.");
         }
     }
 
@@ -1123,9 +1124,6 @@ checkTriggersAndInteractions(time, delta) {
         this.incantationSuccessfulAndForestRevealed &&
         !this.awaitingIncantationInput) {
 
-        // Optional: Add a debug log here if still having issues
-        // console.log(`[DEBUG Gatekeeper Check Tiled Zone] Conditions met. Player at <span class="math-inline">\{playerBodyRect\.x\.toFixed\(0\)\},</span>{playerBodyRect.y.toFixed(0)}. Zone at <span class="math-inline">\{this\.gatekeeperTriggerRect\.x\.toFixed\(0\)\},</span>{this.gatekeeperTriggerRect.y.toFixed(0)}.`);
-
         if (Phaser.Geom.Intersects.RectangleToRectangle(playerBodyRect, this.gatekeeperTriggerRect)) {
             console.log("Player entered Gatekeeper's Tiled TriggerZone. Attempting dialogue.");
             this.gatekeeperDialogueTriggered = true;
@@ -1303,39 +1301,6 @@ checkTriggersAndInteractions(time, delta) {
         }
     }
 
-    endIncantationChallenge() {
-        if (!this.awaitingIncantationInput) return; // Do nothing if not in this mode
-
-        console.log("Ending incantation challenge and cleaning up.");
-
-        // Hide the mobile keyboard and remove the listener
-        const hiddenInput = document.getElementById('hidden-input');
-        if (hiddenInput) {
-            hiddenInput.removeEventListener('input', this.hiddenInputListener);
-            hiddenInput.blur(); // This is what hides the keyboard
-        }
-
-        // Remove the Phaser keyboard listener for the Enter key, if you add one
-        this.input.keyboard.off('keydown-ENTER');
-
-        // Destroy the text prompts and the submit button
-        this.incantationPromptText?.destroy();
-        this.incantationPromptText = null;
-        this.incantationTextObject?.destroy();
-        this.incantationTextObject = null;
-        
-        // Find and destroy the submit button if it exists
-        const submitButton = this.children.getByName('submitButton');
-        if (submitButton) {
-            submitButton.destroy();
-        }
-        
-        // Reset the game state
-        this.awaitingIncantationInput = false;
-        this.player?.setControllable(true);
-    }
-
-
     onCorrectIncantation() {
         this.endIncantationChallenge();
         console.log("Incantation Correct! Proceeding with forest reveal and gatekeeper spawn.");
@@ -1431,62 +1396,93 @@ checkTriggersAndInteractions(time, delta) {
         this.player?.setControllable(false);
         this.typedIncantation = "";
 
-        // Get the hidden HTML input and focus it to show the mobile keyboard
-        const hiddenInput = document.getElementById('hidden-input');
-        if (!hiddenInput) {
-            console.error("#hidden-input element not found in HTML!");
-            return;
-        }
-        hiddenInput.value = "";
-        hiddenInput.focus();
-
-        // Create your visible in-game UI
-        this.incantationPromptText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY - 60, "Recite the incantation:", {
-            font: "18px monospace", fill: "#ff4444", align: 'center', stroke: '#000000', strokeThickness: 3
+        // --- Create your visible prompt UI ---
+        this.incantationPromptText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY - 90, "Recite the incantation:", {
+            fontFamily: 'EccoEpilogue', 
+            fontSize: '20px',          
+            fill: "#ff4444",
+            stroke: '#000000',
+            strokeThickness: 4
         }).setOrigin(0.5).setScrollFactor(0).setDepth(200);
 
-        this.incantationTextObject = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, "_", {
-            font: "20px monospace", fill: "#ffffff", align: 'center', backgroundColor: 'rgba(0,0,0,0.5)', padding: { x: 10, y: 5 }, fixedWidth: 350
+        this.incantationTextObject = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY - 45, "_", {
+            fontFamily: 'EccoEpilogue', 
+            fontSize: '22px',          
+            fill: "#ffffff",
+            align: 'center',
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            padding: { x: 10, y: 5 },
+            fixedWidth: 350
         }).setOrigin(0.5).setScrollFactor(0).setDepth(200);
 
-        // This function reads from the invisible box and updates the visible one
-        this.hiddenInputListener = () => {
-            this.typedIncantation = hiddenInput.value.toUpperCase();
+        // --- Create the Full In-Game Keyboard ---
+        this.keyboardGroup = this.add.group();
+
+        const keyLayout = ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"];
+        const keyWidth = 38;      
+        const keyHeight = 40;     
+        const keySpacing = 5;      
+        let startY = this.cameras.main.centerY -10; // MOVE THE KEYBOARD 
+
+        keyLayout.forEach((row) => {
+            const rowKeys = row.split('');
+            const rowWidth = (rowKeys.length * keyWidth) + ((rowKeys.length - 1) * keySpacing);
+            let startX = this.cameras.main.centerX - (rowWidth / 2);
+
+            rowKeys.forEach(key => {
+                const keyButton = this.add.rectangle(startX, startY, keyWidth, keyHeight, 0x333333, 0.9)
+                    .setOrigin(0)
+                    .setStrokeStyle(2, 0x888888)
+                    .setScrollFactor(0).setDepth(200).setInteractive();
+                
+                const keyText = this.add.text(keyButton.getCenter().x, keyButton.getCenter().y, key, {
+                    fontFamily: 'EccoEpilogue', 
+                    fontSize: '18px'           
+                }).setOrigin(0.5).setScrollFactor(0).setDepth(201);
+
+                keyButton.on('pointerdown', () => {
+                    this.typedIncantation += key;
+                    this.incantationTextObject.setText(this.typedIncantation || "_");
+                });
+
+                this.keyboardGroup.add(keyButton);
+                this.keyboardGroup.add(keyText);
+                startX += (keyWidth + keySpacing);
+            });
+            startY += (keyHeight + keySpacing);
+        });
+
+        // --- Create Special Keys (DEL and SUBMIT) ---
+        const bottomRowY = startY;
+        const delButton = this.add.rectangle(this.cameras.main.centerX - 65, bottomRowY, 70, 40, 0x802222, 0.9)
+            .setOrigin(0.5, 0).setStrokeStyle(2, 0x888888)
+            .setScrollFactor(0).setDepth(200).setInteractive();
+
+        const delText = this.add.text(delButton.getCenter().x, delButton.getCenter().y, "DEL", {
+            fontFamily: 'EccoEpilogue', 
+            fontSize: '18px'
+        }).setOrigin(0.5).setScrollFactor(0).setDepth(201);
+        
+        delButton.on('pointerdown', () => {
+            this.typedIncantation = this.typedIncantation.slice(0, -1);
             this.incantationTextObject.setText(this.typedIncantation || "_");
-        };
-        hiddenInput.addEventListener('input', this.hiddenInputListener);
+        });
+        
+        const submitButton = this.add.rectangle(this.cameras.main.centerX + 65, bottomRowY, 90, 40, 0x228022, 0.9)
+            .setOrigin(0.5, 0).setStrokeStyle(2, 0x888888)
+            .setScrollFactor(0).setDepth(200).setInteractive();
 
-        // Create an on-screen SUBMIT button for mobile
-        const submitButton = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY + 60, 'SUBMIT', {
-            font: "20px monospace", fill: "#ffffff", backgroundColor: 'rgba(0,0,0,0.7)', padding: { x: 15, y: 10 }
-        }).setOrigin(0.5).setScrollFactor(0).setDepth(200).setInteractive().setName('submitButton');
+        const submitText = this.add.text(submitButton.getCenter().x, submitButton.getCenter().y, "SUBMIT", {
+            fontFamily: 'EccoEpilogue', 
+            fontSize: '18px'
+        }).setOrigin(0.5).setScrollFactor(0).setDepth(201);
 
         submitButton.on('pointerdown', () => this.submitIncantation());
 
-        // Also allow the Enter key on a physical keyboard to submit
-        this.input.keyboard.once('keydown-ENTER', () => this.submitIncantation());
-    }
-
-    handleIncantationKeyDown(event) {
-        if (!this.awaitingIncantationInput) return;
-
-        const key = event.key.toUpperCase();
-        const keyCode = event.keyCode;
-
-        if (keyCode >= Phaser.Input.Keyboard.KeyCodes.A && keyCode <= Phaser.Input.Keyboard.KeyCodes.Z) {
-            this.typedIncantation += key;
-        } else if (keyCode === Phaser.Input.Keyboard.KeyCodes.SPACE) {
-            this.typedIncantation += " "; // Allow spaces if your incantation has them
-        } else if (keyCode === Phaser.Input.Keyboard.KeyCodes.BACKSPACE && this.typedIncantation.length > 0) {
-            this.typedIncantation = this.typedIncantation.slice(0, -1);
-        } else if (keyCode === Phaser.Input.Keyboard.KeyCodes.ENTER) {
-            this.submitIncantation();
-            return; // Don't add "Enter" to the text
-        }
-        // Ignore other keys or handle them as needed
-
-        // Update the displayed text (show a cursor or underscore if empty)
-        this.incantationTextObject.setText(this.typedIncantation.length > 0 ? this.typedIncantation : "_");
+        this.keyboardGroup.add(delButton);
+        this.keyboardGroup.add(delText);
+        this.keyboardGroup.add(submitButton);
+        this.keyboardGroup.add(submitText);
     }
 
     submitIncantation() {
@@ -1495,15 +1491,11 @@ checkTriggersAndInteractions(time, delta) {
         const attempt = this.typedIncantation.trim();
 
         if (attempt === this.FULL_CORRECT_INCANTATION) {
-            // --- Success ---
             this.incantationTextObject?.setText("CORRECT!");
             this.time.delayedCall(500, this.onCorrectIncantation, [], this);
-
         } else {
-            // --- Failure ---
             this.incantationTextObject?.setText("Incorrect. Try again.");
-            const hiddenInput = document.getElementById('hidden-input');
-            if (hiddenInput) hiddenInput.value = ""; // Clear the hidden input for a new try
+            this.typedIncantation = ""; // Clear for next attempt
 
             this.time.delayedCall(1500, () => {
                 if (this.awaitingIncantationInput) {
@@ -1511,6 +1503,27 @@ checkTriggersAndInteractions(time, delta) {
                 }
             });
         }
+    }
+
+
+    endIncantationChallenge() {
+        if (!this.awaitingIncantationInput) return;
+
+        // Destroy the keyboard UI
+        if (this.keyboardGroup) {
+            this.keyboardGroup.destroy(true);
+            this.keyboardGroup = null;
+        }
+
+        // Destroy the text prompts
+        this.incantationPromptText?.destroy();
+        this.incantationPromptText = null;
+        this.incantationTextObject?.destroy();
+        this.incantationTextObject = null;
+        
+        // Reset the state
+        this.awaitingIncantationInput = false;
+        this.player?.setControllable(true);
     }
 
     revealEerieForest() {
@@ -1565,7 +1578,7 @@ checkTriggersAndInteractions(time, delta) {
 
         if (this.npcs) {
             this.npcs.add(this.gatekeeperNpc);
-            console.log("GatekeeperNPC instance added to scene and npcs group.");
+            console.log("GatekeeperNPC instance  to scene and npcs group.");
         } else {
             console.error("this.npcs group not defined. Cannot add Gatekeeper.");
             // If npcs group is critical, you might destroy the created gatekeeperNpc to prevent issues

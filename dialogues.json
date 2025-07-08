@@ -44,17 +44,20 @@
     "fish_flies_project_quassia_dialogue": [
     { "speaker": "Fishflies", "line": "Do you remember Project Quassia?" },
     { "speaker": "Luana", "line": "the words sounds familiar but no…not really" },
-    { "speaker": "Fishflies", "line": "that’s… not good. Parts of you were left behind. But you have help now. Someone has put in a lot of work in unearthing the story you so desperately tried to keep a secret. And good thing cause you will need them to interpret what Pentometra showed you and define your mission moving forward" },
+    { "speaker": "Fishflies", "line": "that's… not good. Parts of you were left behind. But you have help now. Someone has put in a lot of work in unearthing the story you so desperately tried to keep a secret." },
+    { "speaker": "Fishflies", "line": "And good thing cause you will need them to interpret what Pentometra showed you and define your mission moving forward" },
+    
     { "speaker": "Luana", "line": "how do they know what Pentometra showed me?" },
     { "speaker": "Fishflies", "line": "that is something you’ll all need to figure out" },
     { "speaker": "Luana", "line": "Who is it? How do I find them?" },
-    { "speaker": "Fishflies", "line": "A brother and Sister. Tony and Giovanna. You can’t interact physically, but they are piecing together your story and trying to make contact. Get to the viking, recite the incantation. When the forest appears behind the viking you’ll know you can safely pass the threshold. Enter the forest, close your eyes, and you will see and hear them" }
+    { "speaker": "Fishflies", "line": "A brother and Sister. Tony and Giovanna. You can’t interact physically, but they are piecing together your story and trying to make contact. Get to the viking, recite the incantation."},
+    { "speaker": "Fishflies", "line": "When the forest appears behind the viking you’ll know you can safely pass the threshold. Enter the forest, close your eyes, and you will see and hear them." }
   ],
 
     "gatekeeper_encounter_dialogue": [
     { "speaker": "Entity", "line": "Welcome Luana. There are things I need to show you. Transmissions from a brother and sister who’ve devoted their lives to unearthing your story." },
     { "speaker": "Luana", "line": "So I’ve heard. I can’t have this. I don’t want interference. Nobody can know my endeavours…" },
-    { "speaker": "Entity", "line": "They understand the sensitive details of your mission. Only the benign non-sensitive aspects that can advance your mission are explicitly shared with the general public. Think of them as your avatars in the physical world." },
+    { "speaker": "Entity", "line": "They understand the sensitive details of your mission. Only the benign non-sensitive aspects that can advance your journey are explicitly shared with the general public. Think of them as your avatars in the physical world." },
     { "speaker": "Entity", "line": "Tony and Giovanna have made music in order to communicate with you. The sensitive details are encrypted within the music in such a way that only yourself, and very select others will understand." },
     { "speaker": "Entity", "line": "There are cyphers threaded all throughout the music in various ways. This is how you’ll communicate sensitive information to each other. The music is how you’ll make contact." },
     { "speaker": "Entity", "line": "You can return to the forest periodically and the transmissions will change as Tony and Giovanna work on them. Do you wish to proceed?" },
