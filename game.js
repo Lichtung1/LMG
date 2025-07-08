@@ -129,7 +129,7 @@ class GameScene extends Phaser.Scene {
                 fontFamily: 'EccoEpilogue', 
                 fontSize: '32px',
                 fill: '#ffffff',
-                backgroundColor: 'rgba(0,0,0,0.5)',
+                backgroundColor: 'rgba(0,0,0,1)',
                 padding: { x: 20, y: 10 }
             }
         ).setOrigin(0.5).setDepth(3000).setScrollFactor(0);
