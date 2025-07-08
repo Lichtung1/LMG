@@ -106,6 +106,10 @@ class GameScene extends Phaser.Scene {
         this.load.spritesheet(ASSETS.MARGOT_IDLE.key, ASSETS.MARGOT_IDLE.file, { frameWidth: MARGOT_CONFIG.SPRITE_WIDTH, frameHeight: MARGOT_CONFIG.SPRITE_HEIGHT });
         this.load.spritesheet(ASSETS.MARGOT_WALK.key, ASSETS.MARGOT_WALK.file, { frameWidth: MARGOT_CONFIG.SPRITE_WIDTH, frameHeight: MARGOT_CONFIG.SPRITE_HEIGHT });
         this.load.spritesheet(ASSETS.GATEKEEPER_SPRITESHEET.key, ASSETS.GATEKEEPER_SPRITESHEET.file, { frameWidth: GATEKEEPER_CONFIG.FRAME_WIDTH, frameHeight: GATEKEEPER_CONFIG.FRAME_HEIGHT });
+        this.load.audio(ASSETS.AUDIO.MUSIC_MAIN.key, ASSETS.AUDIO.MUSIC_MAIN.file);
+        this.load.audio(ASSETS.AUDIO.AMBIENT_FOREST.key, ASSETS.AUDIO.AMBIENT_FOREST.file);
+        this.load.audio(ASSETS.AUDIO.FOOTSTEPS.key, ASSETS.AUDIO.FOOTSTEPS.file);
+        this.load.audio(ASSETS.AUDIO.GLITCH.key, ASSETS.AUDIO.GLITCH.file);
     }
 
     create() {
@@ -114,22 +118,46 @@ class GameScene extends Phaser.Scene {
             this.loadingText = null;
         }
 
+        this.sound.pauseOnBlur = false;
+        // --- Create a "Click to Start" text prompt ---
+        const startPrompt = this.add.text(
+            this.cameras.main.centerX,
+            this.cameras.main.centerY,
+            'Press to Begin',
+            {
+                fontFamily: 'EccoEpilogue', // Use your game's font
+                fontSize: '32px',
+                fill: '#ffffff',
+                backgroundColor: 'rgba(0,0,0,0.5)',
+                padding: { x: 20, y: 10 }
+            }
+        ).setOrigin(0.5).setDepth(3000).setScrollFactor(0);
+
+
+        // --- Listen for the first click (or tap) ---
+        this.input.once('pointerdown', () => {
+            // Now that the user has clicked, the browser allows sound
+                this.backgroundMusic = this.sound.add(ASSETS.AUDIO.MUSIC_MAIN.key, {
+                    loop: true,
+                    volume: 0.5
+                });
+                this.backgroundMusic.play();
+
+            // Hide the prompt text
+            startPrompt.destroy();
+        });
+
         console.log("Phaser: Creating scene...");
 
         
         // --- Mobile Control Setup ---
         if (!this.sys.game.device.os.desktop) { // Only enable touch controls on non-desktop
-            this.input.addPointer(1); // Ensure Phaser is ready for at least 2 touch points (0 and 1)
+            this.input.addPointer(1); // Ensure Phaser is ready for at least 2 touch points
 
             this.input.on('pointerdown', this.handlePointerDown, this);
             this.input.on('pointerup', this.handlePointerUp, this);
             this.input.on('pointerupoutside', this.handlePointerUp, this); // Handle if finger slides off screen
 
-            // Optional: Visual cues for touch areas (for debugging or as part of UI)
-            // This is just for visualization, you can remove it later.
-            //const midPoint = this.cameras.main.width / 2;
-            //this.leftZoneDebug = this.add.rectangle(0, 0, midPoint, this.cameras.main.height, 0xff0000, 0.1).setOrigin(0).setScrollFactor(0).setDepth(500);
-            //this.rightZoneDebug = this.add.rectangle(midPoint, 0, midPoint, this.cameras.main.height, 0x0000ff, 0.1).setOrigin(0).setScrollFactor(0).setDepth(500);
         }
 
         const camWidth = this.cameras.main.width;
@@ -184,7 +212,7 @@ class GameScene extends Phaser.Scene {
         this.glitchManager?.setBackground(this.bgLayer3);
 
         // Incantation Setup
-        this.CORRECT_INCANTATION_WORD = "PASSWORD";
+        this.CORRECT_INCANTATION_WORD = "VAKTA";
         this.INCANTATION_REPETITIONS = 1;
         let tempFullIncantation = [];
         for (let i = 0; i < this.INCANTATION_REPETITIONS; i++) {
@@ -940,10 +968,15 @@ checkTriggersAndInteractions(time, delta) {
                         // Directly start incantation challenge on first proper encounter
                         this.startIncantationChallenge(zone);
 
+                        
                         this.glitchManager?.triggerGlitchByKey(Phaser.Input.Keyboard.KeyCodes.U);
+                        this.sound.play(ASSETS.AUDIO.GLITCH.key); 
                         this.glitchManager?.triggerGlitchByKey(Phaser.Input.Keyboard.KeyCodes.I);
+                        
                         this.glitchManager?.triggerGlitchByKey(Phaser.Input.Keyboard.KeyCodes.O);
+                        
                         this.glitchManager?.triggerGlitchByKey(Phaser.Input.Keyboard.KeyCodes.P);
+                        
                     }
                 }
                 // --- Lake Boundary Trigger ---
@@ -956,6 +989,7 @@ checkTriggersAndInteractions(time, delta) {
                         this.originalBackground.setVisible(true);
                         this.glitchManager.setBackground(this.originalBackground);
                         this.glitchManager.triggerGlitchByKey?.(Phaser.Input.Keyboard.KeyCodes.U); // Example storm glitches
+                        this.sound.play(ASSETS.AUDIO.GLITCH.key);
                         this.glitchManager.triggerGlitchByKey?.(Phaser.Input.Keyboard.KeyCodes.I);
                         this.glitchManager.triggerGlitchByKey?.(Phaser.Input.Keyboard.KeyCodes.O);
                         this.glitchManager.triggerGlitchByKey?.(Phaser.Input.Keyboard.KeyCodes.P);
@@ -1160,12 +1194,25 @@ checkTriggersAndInteractions(time, delta) {
          if (this.playerLight && this.player) { this.playerLight.x = this.player.x; this.playerLight.y = this.player.y; }
     }
 
-    handleGlitches(time) { 
-         if (!this.glitchManager) return;
-         if (Phaser.Input.Keyboard.JustDown(this.glitchKeyU)) this.glitchManager.triggerGlitchByKey(Phaser.Input.Keyboard.KeyCodes.U);
-         if (Phaser.Input.Keyboard.JustDown(this.glitchKeyI)) this.glitchManager.triggerGlitchByKey(Phaser.Input.Keyboard.KeyCodes.I);
-         if (Phaser.Input.Keyboard.JustDown(this.glitchKeyO)) this.glitchManager.triggerGlitchByKey(Phaser.Input.Keyboard.KeyCodes.O);
-         if (Phaser.Input.Keyboard.JustDown(this.glitchKeyP)) this.glitchManager.triggerGlitchByKey(Phaser.Input.Keyboard.KeyCodes.P);
+    handleGlitches(time) {
+        if (!this.glitchManager) return;
+
+        if (Phaser.Input.Keyboard.JustDown(this.glitchKeyU)) {
+            this.glitchManager.triggerGlitchByKey(Phaser.Input.Keyboard.KeyCodes.U);
+            this.sound.play(ASSETS.AUDIO.GLITCH.key); // <-- Add this
+        }
+        if (Phaser.Input.Keyboard.JustDown(this.glitchKeyI)) {
+            this.glitchManager.triggerGlitchByKey(Phaser.Input.Keyboard.KeyCodes.I);
+            this.sound.play(ASSETS.AUDIO.GLITCH.key); // <-- Add this
+        }
+        if (Phaser.Input.Keyboard.JustDown(this.glitchKeyO)) {
+            this.glitchManager.triggerGlitchByKey(Phaser.Input.Keyboard.KeyCodes.O);
+            this.sound.play(ASSETS.AUDIO.GLITCH.key); // <-- Add this
+        }
+        if (Phaser.Input.Keyboard.JustDown(this.glitchKeyP)) {
+            this.glitchManager.triggerGlitchByKey(Phaser.Input.Keyboard.KeyCodes.P);
+            this.sound.play(ASSETS.AUDIO.GLITCH.key); // <-- Add this
+        }
     }
 
     animateTextDisplay(fullMessage, x, y, style) {
@@ -1256,17 +1303,76 @@ checkTriggersAndInteractions(time, delta) {
         }
     }
 
+    endIncantationChallenge() {
+        if (!this.awaitingIncantationInput) return; // Do nothing if not in this mode
+
+        console.log("Ending incantation challenge and cleaning up.");
+
+        // Hide the mobile keyboard and remove the listener
+        const hiddenInput = document.getElementById('hidden-input');
+        if (hiddenInput) {
+            hiddenInput.removeEventListener('input', this.hiddenInputListener);
+            hiddenInput.blur(); // This is what hides the keyboard
+        }
+
+        // Remove the Phaser keyboard listener for the Enter key, if you add one
+        this.input.keyboard.off('keydown-ENTER');
+
+        // Destroy the text prompts and the submit button
+        this.incantationPromptText?.destroy();
+        this.incantationPromptText = null;
+        this.incantationTextObject?.destroy();
+        this.incantationTextObject = null;
+        
+        // Find and destroy the submit button if it exists
+        const submitButton = this.children.getByName('submitButton');
+        if (submitButton) {
+            submitButton.destroy();
+        }
+        
+        // Reset the game state
+        this.awaitingIncantationInput = false;
+        this.player?.setControllable(true);
+    }
+
+
     onCorrectIncantation() {
+        this.endIncantationChallenge();
         console.log("Incantation Correct! Proceeding with forest reveal and gatekeeper spawn.");
         this.awaitingIncantationInput = false;
         this.input.keyboard.off('keydown', this.handleIncantationKeyDown, this);
         this.incantationTextObject?.destroy();
         this.incantationPromptText?.destroy();
-        this.incantationTextObject = null;
-        this.incantationPromptText = null;
         this.player?.setControllable(true);
 
-        if (this.vikingIncantationTriggerZone) { // Assuming this is the zone object
+
+        // 1. Fade out the main background
+        if (this.backgroundMusic && this.backgroundMusic.isPlaying) {
+            this.tweens.add({
+                targets: this.backgroundMusic,
+                volume: 0,
+                duration: 1000,
+                onComplete: () => {
+                    this.backgroundMusic.stop(); // Stop it completely after fade
+                }
+            });
+        }
+
+        // forest music
+        const forestMusic = this.sound.add(ASSETS.AUDIO.AMBIENT_FOREST.key, {
+            loop: true,
+            volume: 0 // Start at 0 volume
+        });
+        forestMusic.play();
+
+        this.tweens.add({
+            targets: forestMusic,
+            volume: 0.6, // Fade in to this volume (adjust as needed)
+            duration: 2000 // 2.5 seconds to fade in
+        });
+
+
+        if (this.vikingIncantationTriggerZone) {
             this.vikingIncantationTriggerZone.isActive = false;
             console.log(`Viking incantation zone "${this.vikingIncantationTriggerZone.name}" deactivated permanently after success.`);
         }
@@ -1320,42 +1426,45 @@ checkTriggersAndInteractions(time, delta) {
     }
 
     startIncantationChallenge(zone) {
-        if (this.awaitingIncantationInput) return; // Don't start if already started
-
-        console.log("Starting incantation challenge.");
+        if (this.awaitingIncantationInput) return;
         this.awaitingIncantationInput = true;
         this.player?.setControllable(false);
-        this.typedIncantation = ""; // Reset previously typed text
+        this.typedIncantation = "";
 
-        // 1. Big Scary Glitch (ensure GlitchManager has such a method)
-        this.glitchManager?.playScaryGlitchSequence?.(); // Or trigger a specific strong glitch
+        // Get the hidden HTML input and focus it to show the mobile keyboard
+        const hiddenInput = document.getElementById('hidden-input');
+        if (!hiddenInput) {
+            console.error("#hidden-input element not found in HTML!");
+            return;
+        }
+        hiddenInput.value = "";
+        hiddenInput.focus();
 
-        // 2. Display Prompt Text
-        const promptX = this.cameras.main.centerX;
-        const promptY = this.cameras.main.centerY - 60; // Position above where typed text will appear
-        if (this.incantationPromptText) this.incantationPromptText.destroy(); // Clear previous
-        this.incantationPromptText = this.add.text(promptX, promptY, "Recite the incantation:", {
-            font: "18px monospace", fill: "#ff4444", align: 'center',
-            stroke: '#000000', strokeThickness: 3,
-            padding: { x:10, y:5 }, backgroundColor: 'rgba(0,0,0,0.6)'
-        }).setOrigin(0.5).setScrollFactor(0).setDepth(200); // High depth
-
-        // 3. Display Area for Typed Text by Player
-        if (this.incantationTextObject) this.incantationTextObject.destroy(); // Clear previous
-        this.incantationTextObject = this.add.text(promptX, this.cameras.main.centerY, "_", { // Start with a placeholder
-            font: "20px monospace", fill: "#ffffff", align: 'center',
-            backgroundColor: 'rgba(0,0,0,0.5)', padding: {x:10, y:5},
-            fixedWidth: 350, // Adjust width as needed
+        // Create your visible in-game UI
+        this.incantationPromptText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY - 60, "Recite the incantation:", {
+            font: "18px monospace", fill: "#ff4444", align: 'center', stroke: '#000000', strokeThickness: 3
         }).setOrigin(0.5).setScrollFactor(0).setDepth(200);
 
-        // 4. Enable Keyboard Input Listener for typing
-        this.input.keyboard.on('keydown', this.handleIncantationKeyDown, this);
+        this.incantationTextObject = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, "_", {
+            font: "20px monospace", fill: "#ffffff", align: 'center', backgroundColor: 'rgba(0,0,0,0.5)', padding: { x: 10, y: 5 }, fixedWidth: 350
+        }).setOrigin(0.5).setScrollFactor(0).setDepth(200);
 
-        // Store the zone and temporarily deactivate it to prevent re-triggering while typing
-        if (zone) {
-            this.vikingIncantationTriggerZone = zone; // Store the actual zone object reference
-            this.vikingIncantationTriggerZone.isActive = false;
-        }
+        // This function reads from the invisible box and updates the visible one
+        this.hiddenInputListener = () => {
+            this.typedIncantation = hiddenInput.value.toUpperCase();
+            this.incantationTextObject.setText(this.typedIncantation || "_");
+        };
+        hiddenInput.addEventListener('input', this.hiddenInputListener);
+
+        // Create an on-screen SUBMIT button for mobile
+        const submitButton = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY + 60, 'SUBMIT', {
+            font: "20px monospace", fill: "#ffffff", backgroundColor: 'rgba(0,0,0,0.7)', padding: { x: 15, y: 10 }
+        }).setOrigin(0.5).setScrollFactor(0).setDepth(200).setInteractive().setName('submitButton');
+
+        submitButton.on('pointerdown', () => this.submitIncantation());
+
+        // Also allow the Enter key on a physical keyboard to submit
+        this.input.keyboard.once('keydown-ENTER', () => this.submitIncantation());
     }
 
     handleIncantationKeyDown(event) {
@@ -1383,29 +1492,24 @@ checkTriggersAndInteractions(time, delta) {
     submitIncantation() {
         if (!this.awaitingIncantationInput) return;
 
-        const attempt = this.typedIncantation.trim().toUpperCase();
-        console.log(`Incantation Submitted: "${attempt}", Correct: "${this.FULL_CORRECT_INCANTATION}"`);
+        const attempt = this.typedIncantation.trim();
 
         if (attempt === this.FULL_CORRECT_INCANTATION) {
-            console.log("Incantation CORRECT!");
-            this.incantationTextObject?.setText("CORRECT!"); // Brief feedback
-            this.time.delayedCall(500, () => { // Slight delay before proceeding
-                this.onCorrectIncantation();
-            });
-        } else {
-            console.log("Incantation INCORRECT.");
-            this.glitchManager?.playScaryGlitchSequence?.(); // Another glitch for wrong attempt
-            this.incantationTextObject?.setText("Incorrect. Try again.");
-            this.typedIncantation = ""; // Clear for next attempt
+            // --- Success ---
+            this.incantationTextObject?.setText("CORRECT!");
+            this.time.delayedCall(500, this.onCorrectIncantation, [], this);
 
-            this.time.delayedCall(1500, () => { // After showing "Incorrect"
-                if (this.awaitingIncantationInput && this.incantationTextObject) { // Check if still in this state
-                    this.incantationTextObject.setText("_"); // Reset to placeholder
-                    if (this.incantationPromptText) this.incantationPromptText.setText("Recite the incantation:");
+        } else {
+            // --- Failure ---
+            this.incantationTextObject?.setText("Incorrect. Try again.");
+            const hiddenInput = document.getElementById('hidden-input');
+            if (hiddenInput) hiddenInput.value = ""; // Clear the hidden input for a new try
+
+            this.time.delayedCall(1500, () => {
+                if (this.awaitingIncantationInput) {
+                    this.incantationTextObject?.setText("_");
                 }
             });
-            // Player can try typing again. The listener is still active.
-            // The vikingIncantationTriggerZone.isActive remains false.
         }
     }
 
