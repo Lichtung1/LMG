@@ -29,8 +29,16 @@ const ASSETS = {
     LUNA_MOTH_SPRITESHEET: { key: 'moth_sheet', file: 'assets/moth_spritesheet.png' },
     MARGOT_IDLE: { key: 'margot_idle_sheet', file: 'assets/margot_idle_spritesheet.png' },
     MARGOT_WALK: { key: 'margot_walk_sheet', file: 'assets/margot_walk_spritesheet.png' },
-    GATEKEEPER_SPRITESHEET: { key: 'gatekeeperSheet', file: 'assets/Entity.png' }
+    GATEKEEPER_SPRITESHEET: { key: 'gatekeeperSheet', file: 'assets/Entity.png' },
+    AUDIO: {
+        MUSIC_MAIN: { key: 'main_music', file: 'assets/sounds/MAINGAMEPLAY.mp3' },
+        AMBIENT_FOREST: { key: 'forest_ambient', file: 'assets/sounds/FORESTBEHINDVIKING.mp3' },
+        FOOTSTEPS: { key: 'footsteps', file: 'assets/sounds/FOOTSTEPS.mp3' },
+        GLITCH: { key: 'glitch_error', file: 'assets/sounds/ERROR.mp3' }
+    }
 };
+
+
 
 // Tiled Map Names
 const TILED_NAMES = {

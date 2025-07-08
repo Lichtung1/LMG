@@ -27,7 +27,7 @@
     { "speaker": "Atlas Moth", "line": "You’ll experience things differently now. Spatial boundaries are easily manipulated. There is a simple incantation that will allow for this kind of manipulation near the viking." },
     { "speaker": "Atlas Moth", "line": "Recite it when you get there and the forest will appear before you. But you must remember and recite the incantation verbatim. Letter for letter." },
     { "speaker": "Luana", "line": "I understand…" },
-    { "speaker": "Atlas Moth", "line": "The incantation is: PASSWORD. Remember it well. Do not forget." }
+    { "speaker": "Atlas Moth", "line": "The incantation is: VAKTA. Remember it well. Do not forget." }
   ],
     "luna_moth_intro_dialogue": [
     { "speaker": "Luna Moth", "line": "Luana. What did Pentometra have to show you?" },
@@ -54,7 +54,10 @@
     "gatekeeper_encounter_dialogue": [
     { "speaker": "Entity", "line": "Welcome Luana. There are things I need to show you. Transmissions from a brother and sister who’ve devoted their lives to unearthing your story." },
     { "speaker": "Luana", "line": "So I’ve heard. I can’t have this. I don’t want interference. Nobody can know my endeavours…" },
-    { "speaker": "Entity", "line": "They understand the sensitive details of your mission. Only the benign non-sensitive aspects that can advance your mission are explicitly shared with the general public. Think of them as your avatars in the physical world. Tony and Giovanna have made music in order to communicate with you. The sensitive details are encrypted within the music in such a way that only yourself, and very select others will understand. There are cyphers threaded all throughout the music in various ways. This is how you’ll communicate sensitive information to each other. The music is how you’ll make contact. You can return to the forest periodically and the transmissions will change as Tony and Giovanna work on them. Do you wish to proceed?" },
+    { "speaker": "Entity", "line": "They understand the sensitive details of your mission. Only the benign non-sensitive aspects that can advance your mission are explicitly shared with the general public. Think of them as your avatars in the physical world." },
+    { "speaker": "Entity", "line": "Tony and Giovanna have made music in order to communicate with you. The sensitive details are encrypted within the music in such a way that only yourself, and very select others will understand." },
+    { "speaker": "Entity", "line": "There are cyphers threaded all throughout the music in various ways. This is how you’ll communicate sensitive information to each other. The music is how you’ll make contact." },
+    { "speaker": "Entity", "line": "You can return to the forest periodically and the transmissions will change as Tony and Giovanna work on them. Do you wish to proceed?" },
     { "speaker": "Luana", "line": "Yes. Please show me" }
   ]
 }

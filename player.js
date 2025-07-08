@@ -18,15 +18,21 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.setPipeline('Light2D');
         this.isControllable = true;
 
-        // --- NEW: Properties for mobile controls ---
+        // --- Properties for mobile controls ---
         this.isMobileMovingLeft = false;
         this.isMobileMovingRight = false;
 
-        // --- NEW: Property to store current keyboard-driven horizontal speed ---
+        // --- Property to store current keyboard-driven horizontal speed ---
         // This helps if GameScene needs to manage when keyboard input is processed vs. mobile
         this.keyboardSpeedX = 0; 
 
         console.log("Player instance created.");
+
+        // === Add this for footstep sounds ===
+        this.footstepSound = this.scene.sound.add(ASSETS.AUDIO.FOOTSTEPS.key, {
+            loop: true,
+            volume: 0.6 // Adjust volume as needed
+        });
     }
 
     setControllable(canControl) {
@@ -76,7 +82,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.anims.play(PLAYER_CONFIG.ANIM_IDLE, true);
     }
 
-    // --- NEW: Methods to be called by GameScene for mobile input ---
+    // --- Methods to be called by GameScene for mobile input ---
     setMobileMoveLeft(isDown) {
         this.isMobileMovingLeft = isDown;
     }
@@ -97,7 +103,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         }
     }
 
-    // --- NEW: Method specifically for keyboard input, called by GameScene ---
+    // --- Method specifically for keyboard input, called by GameScene ---
     handleKeyboardInput(cursors) {
         if (!this.active || !this.isControllable || !cursors || !this.body) {
             this.keyboardSpeedX = 0; // No keyboard input, so no speed from keyboard
@@ -122,7 +128,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         }
     }
 
-    // --- MODIFIED: Main update method, called by GameScene's update loop ---
+    // --- Main update method, called by GameScene's update loop ---
     update(time, delta) { // Cursors object is no longer passed directly here
         if (!this.active || !this.body) {
             return;
@@ -148,6 +154,15 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         this.setVelocityX(targetVelocityX);
 
+        // --- Footstep Sound ---
+        const isRunningOnGround = onGround && targetVelocityX !== 0;
+
+        if (isRunningOnGround && !this.footstepSound.isPlaying) {
+            this.footstepSound.play();
+        } else if (!isRunningOnGround && this.footstepSound.isPlaying) {
+            this.footstepSound.stop();
+        }
+
         // Animation and FlipX logic (consistent for both inputs)
         if (targetVelocityX < 0) { // Moving Left
             this.setFlipX(false); // Your original: false for left
@@ -164,7 +179,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         // Handle jump/fall animation
         if (!onGround) {
             // If the jump animation is set to not repeat (repeat: 0),
-            // it will play once. You might need a specific "falling" frame or loop.
+            // it will play once... might need a specific "falling" frame or loop.
             // For now, just playing 'jump' will show the start of the jump.
             // If it's not already playing 'jump' or if 'jump' finished and we're still airborne.
             if (this.anims.currentAnim?.key !== PLAYER_CONFIG.ANIM_JUMP || 
