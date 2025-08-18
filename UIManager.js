@@ -14,6 +14,9 @@ class UIManager {
         this.isDialogueActive = false;
         this.onDialogueCompleteCallback = null;
 
+        this.skipPromptBox = null;
+        this.skipPromptText = null;
+
         this.typingTimer = null;        // Phaser Time Event for typing characters
         this.currentLineToType = "";    // The full string of the current line
         this.currentCharIndex = 0;      // Index of the character currently being typed
@@ -300,6 +303,50 @@ class UIManager {
         this.onDialogueCompleteCallback?.();
         this.onDialogueCompleteCallback = null;
         this.currentDialogueKey = null;
+    }
+
+    showSkipPrompt() {
+        // If the prompt already exists, just return it.
+        if (this.skipPromptContainer) {
+            return this.skipPromptContainer;
+        }
+
+        const boxHeight = 40;
+        const boxWidth = 150;
+        
+        // Create the background and text...
+        const box = this.scene.add.graphics()
+            .fillStyle(0x111111, 0.85)
+            .fillRect(0, 0, boxWidth, boxHeight);
+
+        const text = this.scene.add.text(
+            boxWidth / 2,
+            boxHeight / 2,
+            'Press to skip',
+            this.dialogueTextStyle
+        ).setOrigin(0.5);
+
+        // Create the container...
+        const padding = 10;
+        this.skipPromptContainer = this.scene.add.container(padding, padding, [box, text])
+            .setScrollFactor(0)
+            .setDepth(990);
+
+        // 1. Define a rectangle that matches the size of your button.
+        const hitArea = new Phaser.Geom.Rectangle(0, 0, boxWidth, boxHeight);
+
+        // 2. Set the container to be interactive USING that hit area.
+        this.skipPromptContainer.setInteractive(hitArea, Phaser.Geom.Rectangle.Contains);
+
+        // Return the new, fully interactive container.
+        return this.skipPromptContainer;
+    }
+
+    hideSkipPrompt() {
+        if (this.skipPromptContainer) {
+            this.skipPromptContainer.destroy();
+            this.skipPromptContainer = null;
+        }
     }
 
     displayTemporaryMessage(message, duration = 3000, style) {

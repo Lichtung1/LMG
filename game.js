@@ -119,34 +119,11 @@ class GameScene extends Phaser.Scene {
             this.loadingText = null;
         }
 
-        this.sound.pauseOnBlur = false;
-        // --- Create a "Click to Start" text prompt ---
-        const startPrompt = this.add.text(
-            this.cameras.main.centerX,
-            this.cameras.main.centerY,
-            'Press to Begin',
-            {
-                fontFamily: 'EccoEpilogue', 
-                fontSize: '32px',
-                fill: '#ffffff',
-                backgroundColor: 'rgba(0,0,0,1)',
-                padding: { x: 20, y: 10 }
-            }
-        ).setOrigin(0.5).setDepth(3000).setScrollFactor(0);
-
-
-        // --- Listen for the first click (or tap) ---
-        this.input.once('pointerdown', () => {
-            // Now that the user has clicked, the browser allows sound
-                this.backgroundMusic = this.sound.add(ASSETS.AUDIO.MUSIC_MAIN.key, {
-                    loop: true,
-                    volume: 0.5
-                });
-                this.backgroundMusic.play();
-
-            // Hide the prompt text
-            startPrompt.destroy();
+        this.backgroundMusic = this.sound.add(ASSETS.AUDIO.MUSIC_MAIN.key, {
+            loop: true,
+            volume: 0.5
         });
+        this.backgroundMusic.play();
 
         console.log("Phaser: Creating scene...");
 
@@ -1624,7 +1601,7 @@ const config = {
         orientation: Phaser.Scale.LANDSCAPE, // Request landscape orientation
         forceOrientation: true // Attempt to force this orientation on mobile
     },
-    scene: [GameScene]
+    scene: [BootScene, StartScene, CutsceneScene, GameScene ]
 };
 
 // --- Create the Phaser Game Instance ---
